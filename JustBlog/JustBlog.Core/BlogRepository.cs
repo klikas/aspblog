@@ -26,6 +26,11 @@ namespace JustBlog.Core
          */
         public IList<Post> Posts(int pageNo, int pageSize)
         {
+            /*
+             * In the Posts method, we've queried database twice to get the posts because we've to eager load all the associated tags. 
+             * We can't use FetchMany along with Skip and Take methods in the Linq query. 
+             * So, first we've fetched all the posts then from their ids we've queried again to get them with their tags. 
+             */
             var posts = _session.Query<Post>()
                 .Where(p => p.Published)
                 .OrderByDescending(p => p.PostedOn)
